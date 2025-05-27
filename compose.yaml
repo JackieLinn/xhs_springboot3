@@ -1,0 +1,24 @@
+services:
+  mysql:
+    image: 'mysql:latest'
+    environment:
+      - 'MYSQL_DATABASE=elm_springboot3'
+      - 'MYSQL_PASSWORD=secret'
+      - 'MYSQL_ROOT_PASSWORD=12345678'
+      - 'MYSQL_USER=myuser'
+    ports:
+      - '3306:3306'
+  redis:
+    image: 'redis:latest'
+    environment:
+      - 'REDIS_PASSWORD=12345678'
+    ports:
+      - '6379:6379'
+  rabbitmq:
+    image: 'rabbitmq:management'
+    environment:
+      - 'RABBITMQ_DEFAULT_USER=root'
+      - 'RABBITMQ_DEFAULT_PASS=12345678'
+    ports:
+      - '5672:5672'
+      - '15672:15672'
