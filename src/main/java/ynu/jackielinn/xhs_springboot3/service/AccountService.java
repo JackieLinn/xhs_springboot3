@@ -1,0 +1,21 @@
+package ynu.jackielinn.xhs_springboot3.service;
+
+import com.baomidou.mybatisplus.extension.service.IService;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import ynu.jackielinn.xhs_springboot3.dto.request.ConfirmResetRO;
+import ynu.jackielinn.xhs_springboot3.dto.request.EmailRegisterRO;
+import ynu.jackielinn.xhs_springboot3.dto.request.EmailResetRO;
+import ynu.jackielinn.xhs_springboot3.entity.po.Account;
+
+public interface AccountService extends IService<Account>, UserDetailsService {
+
+    Account findAccountByUsernameOrEmail(String text);
+
+    String registerEmailVerifyCode(String type, String email, String ip);
+
+    String registerEmailAccount(EmailRegisterRO ro);
+
+    String resetConfirm(ConfirmResetRO ro);
+
+    String resetEmailAccountPassword(EmailResetRO ro);
+}

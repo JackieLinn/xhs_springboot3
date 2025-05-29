@@ -1,13 +1,17 @@
+server:
+  port: 8088
+
 spring:
   mail:
     host: smtp.163.com
     username: linxy20040304@163.com
     password: PXILBFPDDKSNRFAI
   rabbitmq:
-    addresses: localhost
-    username: admin
-    password: admin
+    addresses: 113.45.193.21
+    username: root
+    password: PSfQEwrRRIL6KQEhpZ4n5q71Y4QFeorqYP2JAv26VxE
     virtual-host: /
+    port: 25672
   security:
     filter:
       order: -100
@@ -15,7 +19,18 @@ spring:
       key: abcdefghijk
       expire: 7
   datasource:
-    url: jdbc:mysql://localhost:3306/xhs_springboot3
+    url: jdbc:mysql://113.45.193.21:13306/xhs
     username: root
-    password: 20040304
+    password: PSfQEwrRRIL6KQEhpZ4n5q71Y4QFeorqYP2JAv26VxE
     driver-class-name: com.mysql.cj.jdbc.Driver
+  data:
+    redis:
+      host: 113.45.193.21
+      password: PSfQEwrRRIL6KQEhpZ4n5q71Y4QFeorqYP2JAv26VxE
+      port: 16379
+
+springdoc:
+  swagger-ui:
+    path: /doc/ui
+  api-docs:
+    path: /doc/json
