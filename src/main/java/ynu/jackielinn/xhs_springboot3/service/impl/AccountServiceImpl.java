@@ -163,7 +163,7 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
         Account account = this.findAccountByUsernameOrEmail(username);
         if (account == null)
             throw new UsernameNotFoundException("用户名或密码错误");
-        Role role = roleService.findRoleByRID(accountRoleService.findRIDByUID(account.getId()).getId());
+        Role role = roleService.findRoleByRID(accountRoleService.findRIDByUID(account.getId()).getRid());
         return User
                 .withUsername(username)
                 .password(account.getPassword())
