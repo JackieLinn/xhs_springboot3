@@ -9,4 +9,8 @@ import java.util.List;
 public interface ProductService extends IService<Product> {
 
     List<ProductVO> getRecommendProducts();
+
+    List<ProductVO> getAllProducts();
+
+    List<ProductVO> getProductsByType(Integer type);
 }

@@ -24,4 +24,20 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
                 .map(Proxy::product2VO)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<ProductVO> getAllProducts() {
+        return this.list().stream()
+                .map(Proxy::product2VO)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ProductVO> getProductsByType(Integer type) {
+        LambdaQueryWrapper<Product> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Product::getType, type);
+        return this.list(wrapper).stream()
+                .map(Proxy::product2VO)
+                .collect(Collectors.toList());
+    }
 }
