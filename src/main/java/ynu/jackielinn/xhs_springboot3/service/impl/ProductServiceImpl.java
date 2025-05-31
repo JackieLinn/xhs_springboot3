@@ -40,4 +40,10 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
                 .map(Proxy::product2VO)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public ProductVO getProductById(Long id) {
+        Product product = this.getById(id);
+        return Proxy.product2VO(product);
+    }
 }

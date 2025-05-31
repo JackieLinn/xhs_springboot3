@@ -34,4 +34,9 @@ public class ProductController {
     public RestBean<List<ProductVO>> getProductsByType(@RequestParam Integer type) {
         return RestBean.success(productService.getProductsByType(type));
     }
+
+    @GetMapping("/get-product-by-id")
+    public RestBean<ProductVO> getProductById(@RequestParam Long id) {
+        return RestBean.success(productService.getProductById(id));
+    }
 }

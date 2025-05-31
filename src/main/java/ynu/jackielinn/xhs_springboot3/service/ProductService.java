@@ -13,4 +13,6 @@ public interface ProductService extends IService<Product> {
     List<ProductVO> getAllProducts();
 
     List<ProductVO> getProductsByType(Integer type);
+
+    ProductVO getProductById(Long id);
 }
