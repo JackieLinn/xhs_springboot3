@@ -39,4 +39,9 @@ public class ProductController {
     public RestBean<ProductVO> getProductById(@RequestParam Long id) {
         return RestBean.success(productService.getProductById(id));
     }
+
+    @GetMapping("/get-products-by-mid")
+    public RestBean<List<ProductVO>> getProductsByMid(@RequestParam Long mid) {
+        return RestBean.success(productService.getProductsByMid(mid));
+    }
 }
