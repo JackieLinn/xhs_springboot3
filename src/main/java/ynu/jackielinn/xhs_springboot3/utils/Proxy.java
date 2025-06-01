@@ -5,6 +5,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import ynu.jackielinn.xhs_springboot3.dto.response.MerchantVO;
+import ynu.jackielinn.xhs_springboot3.dto.response.OptionVO;
 import ynu.jackielinn.xhs_springboot3.dto.response.ProductVO;
 import ynu.jackielinn.xhs_springboot3.dto.response.ProductSelectionVO;
 import ynu.jackielinn.xhs_springboot3.entity.po.*;
@@ -39,7 +40,8 @@ public class Proxy implements ApplicationContextAware {
                 vo.setSold(productService.getTotalSoldByMid(merchant.getId())));
     }
 
-    public static ProductSelectionVO product2SelectionVO(Product product, List<Map<String, List<String>>> categories, Double spread) {
+    public static ProductSelectionVO product2SelectionVO(Product product, 
+            List<Map<String, List<OptionVO>>> categories, Double spread) {
         if (product == null) return null;
         return product.asViewObject(ProductSelectionVO.class, vo -> {
             vo.setCategories(categories);

@@ -10,6 +10,8 @@ import ynu.jackielinn.xhs_springboot3.dto.response.ProductSelectionVO;
 import ynu.jackielinn.xhs_springboot3.entity.RestBean;
 import ynu.jackielinn.xhs_springboot3.service.VariantService;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/variant")
 @Tag(name = "商品选择接口", description = "与商品选择相关的操作接口")
@@ -21,5 +23,10 @@ public class VariantController {
     @GetMapping ("/get-product-selection")
     public RestBean<ProductSelectionVO>  getProductSelection(@RequestParam Long pid) {
         return RestBean.success(variantService.getProductSelection(pid));
+    }
+
+    @GetMapping("/calculate-price")
+    public RestBean<Double> calculatePriceByOptions(@RequestParam Long pid, @RequestParam List<Long> optionIds) {
+        return RestBean.success(variantService.calculatePriceByOptions(pid, optionIds));
     }
 }

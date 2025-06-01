@@ -4,12 +4,15 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
+import ynu.jackielinn.xhs_springboot3.dto.response.OptionVO;
 import ynu.jackielinn.xhs_springboot3.dto.response.ProductSelectionVO;
 import ynu.jackielinn.xhs_springboot3.entity.po.*;
 import ynu.jackielinn.xhs_springboot3.mapper.*;
 import ynu.jackielinn.xhs_springboot3.service.VariantService;
 import ynu.jackielinn.xhs_springboot3.utils.Proxy;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -43,8 +46,8 @@ public class VariantServiceImpl extends ServiceImpl<VariantMapper, Variant>
         if (productAttributes.isEmpty()) return null;
 
         // 3. 构建分类信息和计算差价
-        List<Map<String, List<String>>> categories = new ArrayList<>();
-        Map<String, List<String>> categoryMap = new HashMap<>();
+        List<Map<String, List<OptionVO>>> categories = new ArrayList<>();
+        Map<String, List<OptionVO>> categoryMap = new HashMap<>();
         Double totalSpread = 0.0;
 
         for (ProductAttribute pa : productAttributes) {
@@ -55,13 +58,18 @@ public class VariantServiceImpl extends ServiceImpl<VariantMapper, Variant>
             // 获取该商品实际拥有的属性选项
             List<AttributeOption> options = getProductAttributeOptions(pid, attribute.getId());
             if (!options.isEmpty()) {
-                // 将选项内容转换为列表
-                List<String> optionContents = options.stream()
-                        .map(AttributeOption::getContent)
+                // 将选项转换为OptionVO列表
+                List<OptionVO> optionVOs = options.stream()
+                        .map(option -> {
+                            OptionVO vo = new OptionVO();
+                            vo.setId(option.getId());
+                            vo.setContent(option.getContent());
+                            return vo;
+                        })
                         .collect(Collectors.toList());
 
                 // 添加到分类映射
-                categoryMap.put(attribute.getName(), optionContents);
+                categoryMap.put(attribute.getName(), optionVOs);
 
                 // 获取第一个选项的变体差价
                 AttributeOption firstOption = options.get(0);
@@ -75,6 +83,28 @@ public class VariantServiceImpl extends ServiceImpl<VariantMapper, Variant>
 
         // 4. 使用Proxy转换VO
         return Proxy.product2SelectionVO(product, categories, totalSpread);
+    }
+
+    @Override
+    public Double calculatePriceByOptions(Long pid, List<Long> optionIds) {
+        // 1. 获取商品基本信息
+        Product product = productMapper.selectById(pid);
+        if (product == null) return null;
+
+        // 2. 获取这些选项对应的变体差价
+        Double totalSpread = 0.0;
+        for (Long optionId : optionIds) {
+            Variant variant = getVariantByOptionId(pid, optionId);
+            if (variant != null) {
+                totalSpread += variant.getSpread();
+            }
+        }
+
+        // 3. 计算最终价格（使用BigDecimal进行四舍五入）
+        return BigDecimal.valueOf(product.getPrice())
+                .add(BigDecimal.valueOf(totalSpread))
+                .setScale(2, RoundingMode.HALF_UP)
+                .doubleValue();
     }
 
     /**

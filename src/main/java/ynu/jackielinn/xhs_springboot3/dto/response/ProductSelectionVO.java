@@ -16,5 +16,5 @@ public class ProductSelectionVO {
     @Schema(description = "商品图片")
     String image;
     @Schema(description = "商品分类")
-    List<Map<String, List<String>>> categories;
+    List<Map<String, List<OptionVO>>> categories;
 }
