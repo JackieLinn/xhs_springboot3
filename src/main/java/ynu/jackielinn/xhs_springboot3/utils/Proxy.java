@@ -54,4 +54,9 @@ public class Proxy implements ApplicationContextAware {
         if (deliveryAddress == null) return null;
         return deliveryAddress.asViewObject(DeliveryAddressVO.class);
     }
+
+    public static AccountVO account2VO(Account account) {
+        if (account == null) return null;
+        return account.asViewObject(AccountVO.class);
+    }
 }

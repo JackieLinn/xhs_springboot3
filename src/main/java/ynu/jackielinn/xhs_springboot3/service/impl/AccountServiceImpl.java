@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import ynu.jackielinn.xhs_springboot3.dto.request.ConfirmResetRO;
 import ynu.jackielinn.xhs_springboot3.dto.request.EmailRegisterRO;
 import ynu.jackielinn.xhs_springboot3.dto.request.EmailResetRO;
+import ynu.jackielinn.xhs_springboot3.dto.response.AccountVO;
 import ynu.jackielinn.xhs_springboot3.entity.po.Account;
 import ynu.jackielinn.xhs_springboot3.entity.po.Role;
 import ynu.jackielinn.xhs_springboot3.mapper.AccountMapper;
@@ -21,6 +22,7 @@ import ynu.jackielinn.xhs_springboot3.service.AccountService;
 import ynu.jackielinn.xhs_springboot3.service.RoleService;
 import ynu.jackielinn.xhs_springboot3.utils.Const;
 import ynu.jackielinn.xhs_springboot3.utils.FlowUtils;
+import ynu.jackielinn.xhs_springboot3.utils.Proxy;
 
 import java.util.Map;
 import java.util.Random;
@@ -149,6 +151,41 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
             stringRedisTemplate.delete(Const.VERIFY_EMAIL_DATA + email);
         }
         return update ? null : "更新失败，请联系管理员";
+    }
+
+    /**
+     * 根据用户ID获取用户账户信息
+     *
+     * @param uid 用户ID
+     * @return 用户账户信息，如果用户ID为空或用户不存在，则返回null
+     * @throws IllegalArgumentException 如果用户ID为空
+     */
+    @Override
+    public AccountVO getAccountByUid(Long uid) {
+        if (uid == null) {
+            throw new IllegalArgumentException("User ID cannot be null");
+        }
+        Account account = baseMapper.selectById(uid);
+        if (account == null) return null;
+        return Proxy.account2VO(account);
+    }
+
+    /**
+     * 充值操作，更新账户余额
+     *
+     * @param uid 用户ID
+     * @param price 充值金额
+     * @return 操作结果，true表示成功，false表示失败
+     */
+    @Override
+    public Boolean pay(Long uid, Double price) {
+        Account account = baseMapper.selectById(uid);
+        if (account == null) return false;
+        if (account.getBalance() < price) return false;
+        Double newBalance = account.getBalance() - price;
+        account.setBalance(newBalance);
+        int result = baseMapper.updateById(account);
+        return result > 0;
     }
 
     /**
