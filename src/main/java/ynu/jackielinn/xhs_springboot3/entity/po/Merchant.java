@@ -6,11 +6,12 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import ynu.jackielinn.xhs_springboot3.entity.BaseData;
 
 @Data
 @TableName("merchant")
 @AllArgsConstructor
-public class Merchant {
+public class Merchant implements BaseData {
     @TableId(type = IdType.AUTO)
     Long id;
     @TableField("name")
