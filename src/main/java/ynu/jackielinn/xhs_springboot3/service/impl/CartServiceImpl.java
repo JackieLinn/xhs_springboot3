@@ -11,8 +11,10 @@ import ynu.jackielinn.xhs_springboot3.dto.response.CartVO;
 import ynu.jackielinn.xhs_springboot3.entity.po.*;
 import ynu.jackielinn.xhs_springboot3.mapper.*;
 import ynu.jackielinn.xhs_springboot3.service.CartService;
+import ynu.jackielinn.xhs_springboot3.utils.Proxy;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class CartServiceImpl extends ServiceImpl<CartMapper, Cart>
@@ -46,14 +48,10 @@ public class CartServiceImpl extends ServiceImpl<CartMapper, Cart>
         cartOptions.forEach(cartOption -> cartOptionMapper.insert(cartOption));
 
         // 3. 构建返回的VO对象
-        return product.asViewObject(CartVO.class, vo -> {
-            vo.setCid(cart.getId());
-            vo.setPrice(ro.getPrice());
-            vo.setQuantity(ro.getQuantity());
-            vo.setAttributes(ro.getAoids().stream()
-                    .map(aoid -> attributeOptionMapper.selectById(aoid).getContent())
-                    .toList());
-        });
+        List<String> attributes = ro.getAoids().stream()
+                .map(aoid -> attributeOptionMapper.selectById(aoid).getContent())
+                .toList();
+        return Proxy.cart2VO(cart, product, attributes);
     }
 
     @Override
@@ -88,18 +86,16 @@ public class CartServiceImpl extends ServiceImpl<CartMapper, Cart>
         // 2. 转换为VO对象
         return carts.stream().map(cart -> {
             Product product = productMapper.selectById(cart.getPid());
-            return product.asViewObject(CartVO.class, vo -> {
-                vo.setCid(cart.getId());
-                vo.setPrice(cart.getPrice());
-                vo.setQuantity(cart.getQuantity());
-                // 获取购物车项的属性选项内容
-                vo.setAttributes(cartOptionMapper.selectList(
-                                new LambdaQueryWrapper<CartOption>()
-                                        .eq(CartOption::getCid, cart.getId())
-                        ).stream()
-                        .map(cartOption -> attributeOptionMapper.selectById(cartOption.getAoid()).getContent())
-                        .toList());
-            });
-        }).toList();
+            if (product == null) return null;
+
+            List<String> attributes = cartOptionMapper.selectList(
+                    new LambdaQueryWrapper<CartOption>()
+                            .eq(CartOption::getCid, cart.getId())
+            ).stream()
+                    .map(cartOption -> attributeOptionMapper.selectById(cartOption.getAoid()).getContent())
+                    .toList();
+
+            return Proxy.cart2VO(cart, product, attributes);
+        }).filter(Objects::nonNull).toList();
     }
 }

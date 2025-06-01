@@ -59,4 +59,23 @@ public class Proxy implements ApplicationContextAware {
         if (account == null) return null;
         return account.asViewObject(AccountVO.class);
     }
+
+    public static CartVO cart2VO(Cart cart, Product product, List<String> attributes) {
+        return product.asViewObject(CartVO.class, vo -> {
+            vo.setCid(cart.getId());
+            vo.setPrice(cart.getPrice());
+            vo.setQuantity(cart.getQuantity());
+            vo.setAttributes(attributes);
+        });
+    }
+
+    public static OrdersVO orders2VO(Orders order, CartVO cartVO) {
+        return order.asViewObject(OrdersVO.class, vo -> {
+            vo.setOid(order.getId());
+            vo.setCartVO(cartVO);
+            vo.setDate(order.getDate());
+            vo.setPrice(order.getPrice());
+            vo.setStatus(order.getStatus());
+        });
+    }
 }
