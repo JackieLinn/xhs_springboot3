@@ -4,10 +4,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import ynu.jackielinn.xhs_springboot3.dto.response.MerchantVO;
-import ynu.jackielinn.xhs_springboot3.dto.response.OptionVO;
-import ynu.jackielinn.xhs_springboot3.dto.response.ProductVO;
-import ynu.jackielinn.xhs_springboot3.dto.response.ProductSelectionVO;
+import ynu.jackielinn.xhs_springboot3.dto.response.*;
 import ynu.jackielinn.xhs_springboot3.entity.po.*;
 import ynu.jackielinn.xhs_springboot3.service.ProductService;
 
@@ -51,5 +48,10 @@ public class Proxy implements ApplicationContextAware {
             BigDecimal totalPrice = price.add(spreadValue).setScale(2, RoundingMode.HALF_UP);
             vo.setPrice(totalPrice.doubleValue());
         });
+    }
+
+    public static DeliveryAddressVO  deliveryAddress2VO(DeliveryAddress deliveryAddress) {
+        if (deliveryAddress == null) return null;
+        return deliveryAddress.asViewObject(DeliveryAddressVO.class);
     }
 }
