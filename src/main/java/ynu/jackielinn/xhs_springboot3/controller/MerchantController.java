@@ -29,4 +29,9 @@ public class MerchantController {
     public RestBean<List<MerchantVO>> getAllMerchants() {
         return RestBean.success(merchantService.getAllMerchants());
     }
+
+    @GetMapping("/get-merchant-by-pid")
+    public RestBean<MerchantVO> getMerchantVOByPid(Long pid) {
+        return RestBean.success(merchantService.getMerchantVOByPid(pid));
+    }
 }
