@@ -11,4 +11,6 @@ public interface MerchantService extends IService<Merchant> {
     Merchant getMerchantById(Long id);
 
     List<MerchantVO> getAllMerchants();
+
+    MerchantVO getMerchantVOByPid(Long pid);
 }
