@@ -7,7 +7,7 @@ import ynu.jackielinn.xhs_springboot3.entity.po.Blog;
 import java.util.List;
 
 public interface BlogService extends IService<Blog> {
-    Blog getBlogById(Long id);
+    Blog getBlogById(Integer id);
 
     List<Blog> getBlogByUid(Long uid);
 

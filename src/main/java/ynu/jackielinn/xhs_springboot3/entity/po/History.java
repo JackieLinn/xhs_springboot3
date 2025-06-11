@@ -8,26 +8,24 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ynu.jackielinn.xhs_springboot3.dto.response.CommentAccountVO;
+import ynu.jackielinn.xhs_springboot3.dto.response.AccountVO;
+
+import java.util.Date;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@TableName("comments")
-public class Comment {
+@TableName("history")
+public class History {
     @TableId(type = IdType.AUTO)
     private Integer id;
     @TableField("uid")
     private Long uid;
     @TableField("blog_id")
     private Integer blogId;
-    private CommentAccountVO user;
-    @TableField("content")
-    private String content;
-    @TableField("likes")
-    private Integer likes;
-    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     @TableField("create_time")
-    private String createTime;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    private Date createTime;
+    @TableField(exist = false)
     private Blog blog;
 }

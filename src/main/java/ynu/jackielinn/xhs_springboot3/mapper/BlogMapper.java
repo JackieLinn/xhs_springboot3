@@ -31,4 +31,7 @@ public interface BlogMapper extends BaseMapper<Blog> {
                     "WHERE f.follower = #{uid}"
     )
     List<Blog> getFollowingBlogs(Long uid);
+
+    @Select("SELECT * FROM blogs WHERE id = #{id}")
+    Blog getBlogById(Integer id);
 }

@@ -18,7 +18,7 @@ public class BlogController {
     private BlogService blogService;
 
     @GetMapping("/{id}")
-    public RestBean<Blog> getBlogById(@PathVariable(name = "id") Long id) {
+    public RestBean<Blog> getBlogById(@PathVariable(name = "id") Integer id) {
         return RestBean.success(blogService.getBlogById(id));
     }
 

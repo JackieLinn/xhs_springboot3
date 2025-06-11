@@ -31,8 +31,15 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements Bl
     private BlogImagesService blogImagesService;
 
     @Override
-    public Blog getBlogById(Long id) {
-        return null;
+    public Blog getBlogById(Integer id) {
+        Blog blog = blogMapper.getBlogById(id);
+        Account account = accountService.getById(blog.getUid());
+        BlogAccountVO blogAccountVO = convertToBlogAccountVO(account);
+        blog.setUser(blogAccountVO);
+        if(blog.getIsVideo()==false){
+            blog.setImages(blogImagesService.getImagesByBlogId(blog.getId()));
+        }
+        return blog;
     }
 
     @Override
