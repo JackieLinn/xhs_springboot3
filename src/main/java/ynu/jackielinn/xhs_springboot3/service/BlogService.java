@@ -16,4 +16,6 @@ public interface BlogService extends IService<Blog> {
     List<Blog> getBlogsByKeyword(String keyword);
 
     void createBlog(BlogCreateRO blogDTO);
+
+    List<Blog> getFollowingBlogs(Long uid);
 }

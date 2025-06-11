@@ -41,4 +41,10 @@ public class BlogController {
         return RestBean.success();
     }
 
+    @GetMapping("/following")
+    public RestBean<List<Blog>> getFollowingBlogs(@RequestParam(name = "uid") Long uid) {
+        List<Blog> blogs = blogService.getFollowingBlogs(uid);
+        return RestBean.success(blogs);
+    }
+
 }

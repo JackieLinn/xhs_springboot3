@@ -42,6 +42,9 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements Bl
             Account account = accountService.getById(blog.getUid());
             BlogAccountVO blogAccountVO = convertToBlogAccountVO(account);
             blog.setUser(blogAccountVO);
+            if(blog.getIsVideo()==false){
+                blog.setImages(blogImagesService.getImagesByBlogId(blog.getId()));
+            }
         }
         return blogs;
     }
@@ -87,6 +90,20 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements Bl
 //        blog.setUid(AuthUtils.getCurrentUserId()); // 获取当前登录用户 ID
 
         blogMapper.insert(blog); // 使用 MyBatis 插入
+    }
+
+    @Override
+    public List<Blog> getFollowingBlogs(Long uid) {
+        List<Blog> blogs = blogMapper.getFollowingBlogs(uid);
+        for (Blog blog : blogs) {
+            Account account = accountService.getById(blog.getUid());
+            BlogAccountVO blogAccountVO = convertToBlogAccountVO(account);
+            blog.setUser(blogAccountVO);
+            if(blog.getIsVideo()==false){
+                blog.setImages(blogImagesService.getImagesByBlogId(blog.getId()));
+            }
+        }
+        return blogs;
     }
 
     private BlogAccountVO convertToBlogAccountVO(Account account) {

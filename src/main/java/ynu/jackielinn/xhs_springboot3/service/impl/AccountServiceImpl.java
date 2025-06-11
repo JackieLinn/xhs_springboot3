@@ -15,8 +15,10 @@ import ynu.jackielinn.xhs_springboot3.dto.request.EmailRegisterRO;
 import ynu.jackielinn.xhs_springboot3.dto.request.EmailResetRO;
 import ynu.jackielinn.xhs_springboot3.dto.response.AccountVO;
 import ynu.jackielinn.xhs_springboot3.entity.po.Account;
+import ynu.jackielinn.xhs_springboot3.entity.po.Follow;
 import ynu.jackielinn.xhs_springboot3.entity.po.Role;
 import ynu.jackielinn.xhs_springboot3.mapper.AccountMapper;
+import ynu.jackielinn.xhs_springboot3.mapper.FollowMapper;
 import ynu.jackielinn.xhs_springboot3.service.AccountRoleService;
 import ynu.jackielinn.xhs_springboot3.service.AccountService;
 import ynu.jackielinn.xhs_springboot3.service.RoleService;
@@ -24,6 +26,8 @@ import ynu.jackielinn.xhs_springboot3.utils.Const;
 import ynu.jackielinn.xhs_springboot3.utils.FlowUtils;
 import ynu.jackielinn.xhs_springboot3.utils.Proxy;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
@@ -48,6 +52,12 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
 
     @Resource
     RoleService roleService;
+
+    @Resource
+    FollowMapper followMapper;
+
+    @Resource
+    AccountMapper accountMapper;
 
     /**
      * 根据用户名或邮箱查找账户
@@ -167,6 +177,7 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
         }
         Account account = baseMapper.selectById(uid);
         if (account == null) return null;
+
         return Proxy.account2VO(account);
     }
 
@@ -188,6 +199,18 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
         return result > 0;
     }
 
+    @Override
+    public List<AccountVO> getRandomUnfollowedUsers(Long uid) {
+        List<Follow> followed = followMapper.getFollows(uid); // 获取已关注用户ID列表
+        List<Long> followedIds = followed.stream().map(Follow::getUid).toList();
+        // 查询未关注的用户（排除自己和已关注用户）
+        List<Account> candidates = accountMapper.selectRandomUnfollowedUsers(uid, followedIds);
+        List<AccountVO> res = new ArrayList<>();
+        for(Account account: candidates){
+            res.add(Proxy.account2VO(account));
+        }
+        return res;
+    }
     /**
      * 从数据库中通过用户名或邮箱查找用户详细信息
      *

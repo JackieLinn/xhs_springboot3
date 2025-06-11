@@ -23,4 +23,12 @@ public interface BlogMapper extends BaseMapper<Blog> {
                     "   OR a.username LIKE CONCAT('%', #{keyword}, '%')"
     )
     List<Blog> getBlogsByKeyword(String keyword);
+
+    @Select(
+            "SELECT b.* " +
+                    "FROM blogs b " +
+                    "LEFT JOIN follower f ON b.uid = f.uid " +
+                    "WHERE f.follower = #{uid}"
+    )
+    List<Blog> getFollowingBlogs(Long uid);
 }
