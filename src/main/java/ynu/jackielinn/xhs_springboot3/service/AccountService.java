@@ -8,6 +8,8 @@ import ynu.jackielinn.xhs_springboot3.dto.request.EmailResetRO;
 import ynu.jackielinn.xhs_springboot3.dto.response.AccountVO;
 import ynu.jackielinn.xhs_springboot3.entity.po.Account;
 
+import java.util.List;
+
 public interface AccountService extends IService<Account>, UserDetailsService {
 
     Account findAccountByUsernameOrEmail(String text);
@@ -23,4 +25,6 @@ public interface AccountService extends IService<Account>, UserDetailsService {
     AccountVO getAccountByUid(Long uid);
 
     Boolean pay(Long uid, Double price);
+
+    List<AccountVO> getRandomUnfollowedUsers(Long uid);
 }
