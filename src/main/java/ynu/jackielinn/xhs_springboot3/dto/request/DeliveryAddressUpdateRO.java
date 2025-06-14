@@ -9,7 +9,7 @@ import lombok.Data;
 @Schema(description = "送货地址更新对象")
 public class DeliveryAddressUpdateRO {
     @Schema(description = "送货地址ID")
-    Long daid;
+    Long did;
     @Schema(description = "联系人姓名")
     String name;
     @Schema(description = "联系人性别")

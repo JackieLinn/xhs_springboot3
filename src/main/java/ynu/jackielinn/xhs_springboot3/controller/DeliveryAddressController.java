@@ -40,7 +40,7 @@ public class DeliveryAddressController {
 
     @Operation(summary = "移除地址信息", description = "移除地址信息")
     @PostMapping("/remove-address")
-    public RestBean<Integer> removeAddress(Long daid) {
-        return RestBean.success(deliveryAddressService.deleteDeliveryAddress(daid));
+    public RestBean<Integer> removeAddress(Long did) {
+        return RestBean.success(deliveryAddressService.deleteDeliveryAddress(did));
     }
 }

@@ -72,6 +72,21 @@ public class OrdersServiceImpl extends ServiceImpl<OrdersMapper, Orders>
     }
 
     @Override
+    public Boolean updateAddress(Long oid, Long did) {
+        // 1. 获取订单信息
+        Orders order = getById(oid);
+        if (order == null) return false;
+
+        // 2. 验证新的收货地址是否存在
+        DeliveryAddress address = deliveryAddressMapper.selectById(did);
+        if (address == null) return false;
+
+        // 3. 更新订单的收货地址
+        order.setDid(did);
+        return updateById(order);
+    }
+
+    @Override
     @Transactional
     public Boolean payment(PaymentRO ro) {
         Orders order = getById(ro.getOid());

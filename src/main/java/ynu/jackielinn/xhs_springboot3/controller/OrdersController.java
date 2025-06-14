@@ -26,6 +26,12 @@ public class OrdersController {
         return RestBean.success(ordersService.createOrders(ro));
     }
 
+    @Operation(summary = "更改订单地址", description = "更改订单地址")
+    @PostMapping("/update-address")
+    public RestBean<Boolean> updateAddress(@RequestParam Long oid, @RequestParam Long did) {
+        return RestBean.success(ordersService.updateAddress(oid, did));
+    }
+
     @Operation(summary = "支付操作", description = "支付操作")
     @PostMapping("/payment")
     public RestBean<Boolean> ordersPayment(@RequestBody PaymentRO ro) {
