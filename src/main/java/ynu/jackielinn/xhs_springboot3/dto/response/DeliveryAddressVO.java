@@ -7,7 +7,7 @@ import lombok.Data;
 @Schema(description = "送货地址对象")
 public class DeliveryAddressVO {
     @Schema(description = "送餐地址ID")
-    Long daid;
+    Long did;
     @Schema(description = "联系人姓名")
     String name;
     @Schema(description = "联系人性别")

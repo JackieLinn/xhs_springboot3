@@ -12,6 +12,8 @@ public interface OrdersService extends IService<Orders> {
 
     Long createOrders(OrdersCreateRO ro);
 
+    Boolean updateAddress(Long oid, Long did);
+
     Boolean payment(PaymentRO ro);
 
     List<OrdersVO> getOrdersList(Long uid, Integer status);

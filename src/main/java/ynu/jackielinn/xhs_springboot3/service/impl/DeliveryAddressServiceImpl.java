@@ -57,7 +57,7 @@ public class DeliveryAddressServiceImpl extends ServiceImpl<DeliveryAddressMappe
     @Override
     public Integer updateDeliveryAddress(DeliveryAddressUpdateRO ro) {
         UpdateWrapper<DeliveryAddress> updateWrapper = new UpdateWrapper<>();
-        updateWrapper.eq("daid", ro.getDaid());
+        updateWrapper.eq("did", ro.getDid());
         updateWrapper.set("name", ro.getName());
         updateWrapper.set("sex", ro.getSex());
         updateWrapper.set("phone", ro.getPhone());
@@ -69,11 +69,11 @@ public class DeliveryAddressServiceImpl extends ServiceImpl<DeliveryAddressMappe
     /**
      * 根据配送地址ID删除该配送地址
      *
-     * @param daId 配送地址ID
+     * @param did 配送地址ID
      * @return 删除操作影响的行数
      */
     @Override
-    public Integer deleteDeliveryAddress(Long daId) {
-        return this.baseMapper.deleteById(daId);
+    public Integer deleteDeliveryAddress(Long did) {
+        return this.baseMapper.deleteById(did);
     }
 }

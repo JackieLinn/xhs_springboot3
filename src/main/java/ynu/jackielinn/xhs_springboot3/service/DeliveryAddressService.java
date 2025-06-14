@@ -16,5 +16,5 @@ public interface DeliveryAddressService extends IService<DeliveryAddress> {
 
     Integer updateDeliveryAddress(DeliveryAddressUpdateRO ro);
 
-    Integer deleteDeliveryAddress(Long daid);
+    Integer deleteDeliveryAddress(Long did);
 }
