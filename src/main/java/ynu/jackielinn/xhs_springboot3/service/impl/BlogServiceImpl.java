@@ -10,10 +10,12 @@ import ynu.jackielinn.xhs_springboot3.dto.request.BlogCreateRO;
 import ynu.jackielinn.xhs_springboot3.dto.response.BlogAccountVO;
 import ynu.jackielinn.xhs_springboot3.entity.po.Account;
 import ynu.jackielinn.xhs_springboot3.entity.po.Blog;
+import ynu.jackielinn.xhs_springboot3.entity.po.Liked;
 import ynu.jackielinn.xhs_springboot3.mapper.BlogMapper;
 import ynu.jackielinn.xhs_springboot3.service.AccountService;
 import ynu.jackielinn.xhs_springboot3.service.BlogImagesService;
 import ynu.jackielinn.xhs_springboot3.service.BlogService;
+import ynu.jackielinn.xhs_springboot3.service.LikedService;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -29,6 +31,9 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements Bl
 
     @Resource
     private BlogImagesService blogImagesService;
+
+    @Resource
+    private LikedService likedService;
 
     @Override
     public Blog getBlogById(Integer id) {
@@ -113,6 +118,32 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements Bl
         return blogs;
     }
 
+    @Transactional
+    @Override
+    public void addLike(Integer id) {
+        blogMapper.addLike(id);
+        Blog blog = blogMapper.getBlogById(id);
+        Account account = accountService.getById(blog.getUid());
+        Liked liked = new Liked();
+        liked.setUid(account.getId());
+        liked.setBid(id);
+        likedService.save(liked);
+        accountService.addLike(account.getId());
+    }
+
+    @Transactional
+    @Override
+    public void deleteLike(Integer id) {
+        blogMapper.deleteLike(id);
+        Blog blog = blogMapper.getBlogById(id);
+        Account account = accountService.getById(blog.getUid());
+        Liked liked = new Liked();
+        liked.setUid(account.getId());
+        liked.setBid(id);
+        likedService.removeCall(liked);
+        accountService.deleteLike(account.getId());
+    }
+
     private BlogAccountVO convertToBlogAccountVO(Account account) {
         BlogAccountVO blogAccountVO = new BlogAccountVO();
         blogAccountVO.setId(account.getId());
@@ -120,4 +151,5 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements Bl
         blogAccountVO.setAvatar(account.getAvatar());
         return blogAccountVO;
     }
+
 }

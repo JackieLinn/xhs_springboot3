@@ -18,4 +18,8 @@ public interface BlogService extends IService<Blog> {
     void createBlog(BlogCreateRO blogDTO);
 
     List<Blog> getFollowingBlogs(Long uid);
+
+    void addLike(Integer id);
+
+    void deleteLike(Integer id);
 }

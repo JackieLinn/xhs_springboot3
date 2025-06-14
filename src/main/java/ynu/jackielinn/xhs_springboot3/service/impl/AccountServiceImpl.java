@@ -211,6 +211,17 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
         }
         return res;
     }
+
+    @Override
+    public void addLike(Long id) {
+        accountMapper.addLike(id);
+    }
+
+    @Override
+    public void deleteLike(Long id) {
+        accountMapper.deleteLike(id);
+    }
+
     /**
      * 从数据库中通过用户名或邮箱查找用户详细信息
      *
