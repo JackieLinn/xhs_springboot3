@@ -47,4 +47,15 @@ public class BlogController {
         return RestBean.success(blogs);
     }
 
+    @PostMapping("/addLike/{id}")
+    public RestBean<Void> addLike(@PathVariable(name = "id") Integer id) {
+        blogService.addLike(id);
+        return RestBean.success();
+    }
+
+    @DeleteMapping("/deleteLike/{id}")
+    public RestBean<Void> deleteLike(@PathVariable(name = "id") Integer id) {
+        blogService.deleteLike(id);
+        return RestBean.success();
+    }
 }

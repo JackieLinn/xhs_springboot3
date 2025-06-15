@@ -27,4 +27,8 @@ public interface AccountService extends IService<Account>, UserDetailsService {
     Boolean pay(Long uid, Double price);
 
     List<AccountVO> getRandomUnfollowedUsers(Long uid);
+
+    void addLike(Long id);
+
+    void deleteLike(Long id);
 }

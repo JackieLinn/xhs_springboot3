@@ -34,4 +34,10 @@ public interface BlogMapper extends BaseMapper<Blog> {
 
     @Select("SELECT * FROM blogs WHERE id = #{id}")
     Blog getBlogById(Integer id);
+
+    @Update("UPDATE blogs SET likes = likes + 1 WHERE id = #{id}")
+    void addLike(Integer id);
+
+    @Update("UPDATE blogs SET likes = likes - 1 WHERE id = #{id}")
+    void deleteLike(Integer id);
 }

@@ -21,4 +21,10 @@ public interface AccountMapper extends BaseMapper<Account> {
     // 将用户 follower 的粉丝数 +1
     @Update("UPDATE account SET fans = fans + 1 WHERE id = #{follower}")
     void addFan(Long follower);
+
+    @Update("UPDATE account SET likes = likes + 1 WHERE id = #{id}")
+    void addLike(Long id);
+
+    @Update("UPDATE account SET likes = likes - 1 WHERE id = #{id}")
+    void deleteLike(Long id);
 }
