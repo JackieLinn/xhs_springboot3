@@ -19,4 +19,6 @@ public interface ProductService extends IService<Product> {
     Integer getTotalSoldByMid(long mid);
 
     List<ProductVO> getProductsByMid(long mid);
+
+    List<ProductVO> search(String keyword);
 }

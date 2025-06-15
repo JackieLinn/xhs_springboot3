@@ -44,4 +44,9 @@ public class ProductController {
     public RestBean<List<ProductVO>> getProductsByMid(@RequestParam Long mid) {
         return RestBean.success(productService.getProductsByMid(mid));
     }
+
+    @GetMapping("/search")
+    public RestBean<List<ProductVO>> search(@RequestParam String keyword) {
+        return RestBean.success(productService.search(keyword));
+    }
 }

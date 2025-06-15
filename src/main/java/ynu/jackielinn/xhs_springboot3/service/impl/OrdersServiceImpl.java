@@ -1,6 +1,7 @@
 package ynu.jackielinn.xhs_springboot3.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
@@ -91,12 +92,24 @@ public class OrdersServiceImpl extends ServiceImpl<OrdersMapper, Orders>
     public Boolean payment(PaymentRO ro) {
         Orders order = getById(ro.getOid());
         if (order == null) return false;
-
         Boolean payResult = accountService.pay(ro.getUid(), order.getPrice());
         if (!payResult) return false;
-
         order.setStatus(1);
-        return updateById(order);
+        boolean updatedOrder = updateById(order);
+        if (!updatedOrder) return false;
+        Long cid = order.getCid();
+        List<Cart> carts = cartMapper.selectList(
+                new QueryWrapper<Cart>().eq("id", cid)
+        );
+        for (Cart cart : carts) {
+            Long pid = cart.getPid();
+            Product prod = productMapper.selectById(pid);
+            if (prod != null) {
+                prod.setPayers(prod.getPayers() + 1);
+                productMapper.updateById(prod);
+            }
+        }
+        return true;
     }
 
     @Override
