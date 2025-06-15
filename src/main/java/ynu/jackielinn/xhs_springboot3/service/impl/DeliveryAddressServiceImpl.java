@@ -35,6 +35,12 @@ public class DeliveryAddressServiceImpl extends ServiceImpl<DeliveryAddressMappe
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public DeliveryAddressVO getDeliveryAddressById(Long did) {
+        DeliveryAddress deliveryAddress = baseMapper.selectById(did);
+        return Proxy.deliveryAddress2VO(deliveryAddress);
+    }
+
     /**
      * 保存配送地址
      *
@@ -57,7 +63,7 @@ public class DeliveryAddressServiceImpl extends ServiceImpl<DeliveryAddressMappe
     @Override
     public Integer updateDeliveryAddress(DeliveryAddressUpdateRO ro) {
         UpdateWrapper<DeliveryAddress> updateWrapper = new UpdateWrapper<>();
-        updateWrapper.eq("did", ro.getDid());
+        updateWrapper.eq("id", ro.getDid());
         updateWrapper.set("name", ro.getName());
         updateWrapper.set("sex", ro.getSex());
         updateWrapper.set("phone", ro.getPhone());

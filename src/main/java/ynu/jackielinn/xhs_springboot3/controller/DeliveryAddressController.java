@@ -26,6 +26,12 @@ public class DeliveryAddressController {
         return RestBean.success(deliveryAddressService.listDeliveryAddressByUserId(uid));
     }
 
+    @Operation(summary = "获取用户单个地址信息", description = "获取用户单个地址信息")
+    @GetMapping("/get-address-by-id")
+    public RestBean<DeliveryAddressVO> getAddress(Long did) {
+        return RestBean.success(deliveryAddressService.getDeliveryAddressById(did));
+    }
+
     @Operation(summary = "保存地址信息", description = "保存地址信息")
     @PostMapping("/save-address")
     public RestBean<Integer> saveAddress(@RequestBody DeliveryAddressSaveRO ro) {

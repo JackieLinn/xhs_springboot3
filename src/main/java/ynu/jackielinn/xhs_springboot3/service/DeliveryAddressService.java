@@ -12,6 +12,8 @@ public interface DeliveryAddressService extends IService<DeliveryAddress> {
 
     List<DeliveryAddressVO> listDeliveryAddressByUserId(Long uid);
 
+    DeliveryAddressVO getDeliveryAddressById(Long did);
+
     Integer saveDeliveryAddress(DeliveryAddressSaveRO ro);
 
     Integer updateDeliveryAddress(DeliveryAddressUpdateRO ro);
