@@ -35,8 +35,8 @@ public class BlogController {
         return RestBean.success(blogs);
     }
 
-    @PostMapping
-    public RestBean<Void> publishBlog(@RequestBody BlogCreateRO blogDTO) {
+    @PostMapping("/publish")
+    public RestBean<Void> publishBlogWithImages(@RequestBody BlogCreateRO blogDTO) {
         blogService.createBlog(blogDTO);
         return RestBean.success();
     }

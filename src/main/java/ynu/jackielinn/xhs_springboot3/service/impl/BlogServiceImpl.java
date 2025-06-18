@@ -10,6 +10,7 @@ import ynu.jackielinn.xhs_springboot3.dto.request.BlogCreateRO;
 import ynu.jackielinn.xhs_springboot3.dto.response.BlogAccountVO;
 import ynu.jackielinn.xhs_springboot3.entity.po.Account;
 import ynu.jackielinn.xhs_springboot3.entity.po.Blog;
+import ynu.jackielinn.xhs_springboot3.entity.po.BlogImages;
 import ynu.jackielinn.xhs_springboot3.entity.po.Liked;
 import ynu.jackielinn.xhs_springboot3.mapper.BlogMapper;
 import ynu.jackielinn.xhs_springboot3.service.AccountService;
@@ -17,7 +18,7 @@ import ynu.jackielinn.xhs_springboot3.service.BlogImagesService;
 import ynu.jackielinn.xhs_springboot3.service.BlogService;
 import ynu.jackielinn.xhs_springboot3.service.LikedService;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -91,17 +92,30 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements Bl
     }
 
     @Override
-    public void createBlog(BlogCreateRO dto) {
+    @Transactional
+    public void createBlog(BlogCreateRO blogDTO) {
         Blog blog = new Blog();
-//        blog.setTitle(dto.getTitle());
-//        blog.setContent(dto.getContent());
-//        blog.setVisibility(dto.getVisibility());
-//        blog.setImage(dto.getImage());
-//        blog.setCreateTime(LocalDateTime.now());
-//        blog.setUpdateTime(LocalDateTime.now());
-//        blog.setUid(AuthUtils.getCurrentUserId()); // 获取当前登录用户 ID
-
-        blogMapper.insert(blog); // 使用 MyBatis 插入
+        System.out.println(blogDTO.getUid());
+        blog.setUid(blogDTO.getUid());
+        blog.setTitle(blogDTO.getTitle());
+        blog.setContent(blogDTO.getContent());
+        blog.setDraft(blogDTO.getDraft() != null ? blogDTO.getDraft() : false);
+        blog.setIsVideo(blogDTO.getIsVideo() != null ? blogDTO.getIsVideo() : false);
+        Date now = new Date();
+        blog.setCreateTime(now);
+        blog.setLikes(0);
+        
+        blogMapper.insert(blog);
+        
+        // 如果有图片URL，保存到blog_images表
+        if (blogDTO.getImageUrls() != null && !blogDTO.getImageUrls().isEmpty()) {
+            for (String imageUrl : blogDTO.getImageUrls()) {
+                BlogImages blogImage = new BlogImages();
+                blogImage.setBid(blog.getId());
+                blogImage.setUrl(imageUrl);
+                blogImagesService.save(blogImage);
+            }
+        }
     }
 
     @Override

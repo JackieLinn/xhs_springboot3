@@ -24,6 +24,8 @@ public class UploadController {
 
     private static final String TOKEN_API = "https://picui.cn/api/v1/images/tokens";
     private static final String UPLOAD_API = "https://picui.cn/api/v1/upload";
+    // 使用你提供的API Key
+    private static final String API_KEY = "1214|KrNZbShUIrUhv2YJaNaGRrKhYxzzMJttx2XWalxd";
 
     private final RestTemplate restTemplate = new RestTemplate();
 
@@ -31,14 +33,18 @@ public class UploadController {
     public RestBean<String> uploadImage(@RequestPart("file") MultipartFile file) {
         try {
             // 1. 获取上传 token
-            Map<String, Object> tokenReq = Map.of("num", 1, "seconds", 3600);
+            Map<String, Object> tokenReq = Map.of("num", 1, "seconds",2626560);
             HttpHeaders tokenHeaders = new HttpHeaders();
             tokenHeaders.setContentType(MediaType.APPLICATION_JSON);
+            // 添加认证头 - 使用Bearer Token方式
+            tokenHeaders.set("Authorization", "Bearer " + API_KEY);
+            tokenHeaders.set("Accept", "application/json");
             HttpEntity<?> tokenEntity = new HttpEntity<>(tokenReq, tokenHeaders);
 
             ResponseEntity<Map> tokenResp = restTemplate.postForEntity(TOKEN_API, tokenEntity, Map.class);
             if (tokenResp.getStatusCode() != HttpStatus.OK || !(Boolean) tokenResp.getBody().get("status")) {
-                return RestBean.failure(500, "获取上传 token 失败");
+                log.error("获取token失败：状态码 = {}, 响应 = {}", tokenResp.getStatusCode(), tokenResp.getBody());
+                return RestBean.failure(500, "获取上传 token 失败: " + tokenResp.getBody().get("message"));
             }
 
             Map tokenData = ((List<Map>) ((Map) tokenResp.getBody().get("data")).get("tokens")).get(0);
@@ -54,6 +60,9 @@ public class UploadController {
 
             HttpHeaders uploadHeaders = new HttpHeaders();
             uploadHeaders.setContentType(MediaType.MULTIPART_FORM_DATA);
+            // 上传时也需要认证头
+            uploadHeaders.set("Authorization", "Bearer " + API_KEY);
+            uploadHeaders.set("Accept", "application/json");
 
             HttpEntity<MultiValueMap<String, Object>> uploadEntity = new HttpEntity<>(formData, uploadHeaders);
             ResponseEntity<Map> uploadResp = restTemplate.postForEntity(UPLOAD_API, uploadEntity, Map.class);
@@ -63,10 +72,14 @@ public class UploadController {
                 return RestBean.failure(500, "上传失败: " + uploadResp.getBody().get("message"));
             }
 
-            String imageUrl = (String) ((Map) uploadResp.getBody().get("data")).get("url");
+            // 根据API响应结构，图片URL在 data.links.url 路径下
+            Map data = (Map) uploadResp.getBody().get("data");
+            Map links = (Map) data.get("links");
+            String imageUrl = (String) links.get("url");
             return RestBean.success(imageUrl);
 
         } catch (Exception e) {
+            log.error("上传图片异常", e);
             return RestBean.failure(500, "服务器异常：" + e.getMessage());
         }
     }
