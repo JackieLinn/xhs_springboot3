@@ -1,0 +1,52 @@
+server:
+  port: 8088
+  tomcat:
+    max-swallow-size: 100MB
+
+spring:
+  mail:
+    host: smtp.163.com
+    username: linxy20040304@163.com
+    password: PXILBFPDDKSNRFAI
+  rabbitmq:
+    addresses: 113.45.193.21
+    username: root
+    password: PSfQEwrRRIL6KQEhpZ4n5q71Y4QFeorqYP2JAv26VxE
+    virtual-host: /
+    port: 25672
+  security:
+    filter:
+      order: -100
+    jwt:
+      key: abcdefghijk
+      expire: 7
+  datasource:
+    url: jdbc:mysql://113.45.193.21:13306/xhs
+    username: root
+    password: PSfQEwrRRIL6KQEhpZ4n5q71Y4QFeorqYP2JAv26VxE
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  data:
+    redis:
+      host: 113.45.193.21
+      password: PSfQEwrRRIL6KQEhpZ4n5q71Y4QFeorqYP2JAv26VxE
+      port: 16379
+  servlet:
+    multipart:
+          max-file-size: 50MB
+          max-request-size: 50MB
+
+springdoc:
+  swagger-ui:
+    path: /doc/ui
+  api-docs:
+    path: /doc/json
+
+logging:
+  level:
+    root: info
+    ynu.jackielinn.xhs_springboot3: debug
+
+mybatis:
+  mapper-locations: classpath:ynu/jackielinn/xhs_springboot3/mapper/*.xml
+
+
