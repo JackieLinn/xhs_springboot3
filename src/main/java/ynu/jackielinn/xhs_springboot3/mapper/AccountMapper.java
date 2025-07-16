@@ -27,10 +27,13 @@ public interface AccountMapper extends BaseMapper<Account> {
 
     @Update("UPDATE account SET likes = likes - 1 WHERE id = #{id}")
     void deleteLike(Long id);
+<<<<<<< HEAD
 
     @Update("UPDATE account SET follow = follow - 1 WHERE id = #{uid}")
     void deleteFollow(Long uid);
 
     @Update("UPDATE account SET fans = fans - 1 WHERE id = #{follower}")
     void deleteFan(Long follower);
+=======
+>>>>>>> e16626736a1a2a2b85c66b347a7b6244025690c9
 }

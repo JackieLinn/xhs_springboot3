@@ -8,7 +8,11 @@ import java.util.List;
 
 @Mapper
 public interface BlogMapper extends BaseMapper<Blog> {
+<<<<<<< HEAD
     @Select("SELECT * FROM blogs where is_video = 0 ORDER BY RAND()")  // Fetch random blogs
+=======
+    @Select("SELECT * FROM blogs ORDER BY RAND()")  // Fetch random blogs
+>>>>>>> e16626736a1a2a2b85c66b347a7b6244025690c9
     List<Blog> getRandomBlogs();  // Get random blogs (no need for user info here)
 
     @Select("SELECT * FROM blogs WHERE uid = #{uid}")
@@ -36,6 +40,7 @@ public interface BlogMapper extends BaseMapper<Blog> {
     Blog getBlogById(Integer id);
 
     @Update("UPDATE blogs SET likes = likes + 1 WHERE id = #{id}")
+<<<<<<< HEAD
     void addLike(Long uid,Integer id);
 
     @Update("UPDATE blogs SET likes = likes - 1 WHERE id = #{id}")
@@ -51,4 +56,10 @@ public interface BlogMapper extends BaseMapper<Blog> {
                     "WHERE l.uid = #{uid}"
     )
     List<Blog> getLikedBlogs(Long uid);
+=======
+    void addLike(Integer id);
+
+    @Update("UPDATE blogs SET likes = likes - 1 WHERE id = #{id}")
+    void deleteLike(Integer id);
+>>>>>>> e16626736a1a2a2b85c66b347a7b6244025690c9
 }
