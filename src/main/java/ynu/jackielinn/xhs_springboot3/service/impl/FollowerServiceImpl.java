@@ -25,4 +25,26 @@ public class FollowerServiceImpl extends ServiceImpl<FollowMapper, Follow> imple
         accountMapper.addFollow(follow.getFollower());
         accountMapper.addFan(follow.getUid());
     }
+
+    @Override
+    public boolean isFollowing(Long follower, Long uid) {
+        return this.lambdaQuery()
+                .eq(Follow::getFollower, follower)
+                .eq(Follow::getUid, uid)
+                .exists();
+    }
+
+    @Override
+    @Transactional
+    public void unfollow(Long follower, Long uid) {
+        // 删除关注记录
+        this.lambdaUpdate()
+                .eq(Follow::getFollower, follower)
+                .eq(Follow::getUid, uid)
+                .remove();
+        
+        // 更新关注数和粉丝数
+        accountMapper.deleteFollow(follower);
+        accountMapper.deleteFan(uid);
+    }
 }

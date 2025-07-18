@@ -23,7 +23,7 @@ public class HistoryServiceImpl extends ServiceImpl<HistoryMapper, History> impl
     public List<History> getHistoryByUid(Long uid) {
         List<History> historyList = historyMapper.getHistoryByUid(uid);
         for(History history : historyList){
-            history.setBlog(blogService.getBlogById(history.getBlogId()));
+            history.setBlog(blogService.getBlogById(history.getBlogId(),uid));
         }
         return historyList;
     }

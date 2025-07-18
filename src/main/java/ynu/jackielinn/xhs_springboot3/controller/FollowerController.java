@@ -13,7 +13,16 @@ public class FollowerController {
     private FollowerService followerService;
     @PostMapping("/add")
     public RestBean<String> addFollower(@RequestBody Follow follow){
+        // 检查是否已经关注
+        if (followerService.isFollowing(follow.getFollower(), follow.getUid())) {
+            return RestBean.failure(400, "已经关注过了");
+        }
         followerService.follow(follow);
         return RestBean.success("添加成功");
+    }
+    @PostMapping("/remove")
+    public RestBean<String> removeFollower(@RequestParam(name = "follower") Long follower, @RequestParam(name = "uid") Long uid){
+        followerService.unfollow(follower, uid);
+        return RestBean.success("取消关注成功");
     }
 }

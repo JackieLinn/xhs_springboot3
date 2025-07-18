@@ -16,4 +16,9 @@ public class LikedServiceImpl extends ServiceImpl<LikedMapper, Liked> implements
     public void removeCall(Liked liked) {
         likedMapper.removeCall(liked);
     }
+
+    @Override
+    public boolean existsByUidAndBid(Long uid, Integer bid) {
+        return likedMapper.existsByUidAndBid(uid, bid) > 0;
+    }
 }

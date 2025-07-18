@@ -22,12 +22,4 @@ public class TestComment {
     @Resource
     private ObjectMapper objectMapper;
 
-    @Test
-    void testGetComment() throws Exception {
-        List<Comment> comments = commentService.getCommentsByBlogId(1);
-        for (Comment comment : comments){
-            System.out.println(objectMapper.writeValueAsString(comment));
-        }
-    }
-
 }

@@ -8,27 +8,21 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ynu.jackielinn.xhs_springboot3.dto.response.CommentAccountVO;
+
+import java.util.Date;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@TableName("comments")
-public class Comment {
+@TableName("search_history")
+public class SearchHistory {
     @TableId(type = IdType.AUTO)
     private Integer id;
     @TableField("uid")
     private Long uid;
-    @TableField("blog_id")
-    private Integer blogId;
-    private CommentAccountVO user;
-    @TableField("content")
-    private String content;
-    @TableField("likes")
-    private Integer likes;
-    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+    @TableField("keyword")
+    private String keyword;
     @TableField("create_time")
-    private String createTime;
-    private Blog blog;
-    private Boolean liked;
-}
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    private Date createTime;
+} 
